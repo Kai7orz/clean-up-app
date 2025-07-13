@@ -6,7 +6,6 @@ import sys
 from utils.resize_image import resize_image
 from utils.make_mask import make_mask
 
-
 class Item(BaseModel):
     name: str 
     description: Union[str,None] = None 
@@ -14,10 +13,10 @@ class Item(BaseModel):
     tax: Union[float,None] = None
 
 def MyDebugs():
-    print("Mydebug is  called",flush=True)
     image_path = "assets/images/test_image.jpg"
     resized_input_path = resize_image(image_path)
-    mask_output = make_mask(resized_input_path)
+    custom_output_path = "assets/images/mask.jpg"
+    mask_output = make_mask(image_path=resized_input_path,output_path=custom_output_path)
 
 
 MyDebugs()
