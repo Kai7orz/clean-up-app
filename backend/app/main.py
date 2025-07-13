@@ -1,5 +1,28 @@
 from fastapi import FastAPI 
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel 
+from typing import Union 
+import sys 
+from utils.resize_image import resize_image
+from utils.make_mask import make_mask
+
+
+class Item(BaseModel):
+    name: str 
+    description: Union[str,None] = None 
+    price: float 
+    tax: Union[float,None] = None
+
+def MyDebugs():
+    print("Mydebug is  called",flush=True)
+    image_path = "assets/images/test_image.jpg"
+    resized_input_path = resize_image(image_path)
+    mask_output = make_mask(resized_input_path)
+
+
+MyDebugs()
+
+
 
 app = FastAPI() 
 
@@ -20,3 +43,12 @@ app.add_middleware(
 def read_root():
     images = [{"message":"Hello World!"},{"message":"hello image"}]
     return images
+
+@app.get("/users/{user_id}")
+async def read_user(user_id: int):
+    return {"user_id": user_id}
+
+
+
+# @app.post("/users/{user_id}/images/{image_url}")
+# async def upload_image(user_id:int , image_url:str):
