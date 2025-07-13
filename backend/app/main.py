@@ -58,6 +58,9 @@ async def read_user(user_id: int):
 
 @app.post("/users/{user_id}/")
 async def get_illustration(image_id: int=0):
+    # 画像をファイルオブジェクトとして読み込む
+    # client へバイナリpng として送信する処理
+
     return 
 
 
