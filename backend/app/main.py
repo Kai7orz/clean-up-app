@@ -5,7 +5,8 @@ from typing import Union
 import sys 
 from utils.resize_image import resize_image
 from utils.make_mask import make_mask
-
+from utils.convert_rgb_to_rgba import convert_to_rgba_image
+from api.gpt_image_client import call_gpt_with_image
 
 class Item(BaseModel):
     name: str 
@@ -13,14 +14,21 @@ class Item(BaseModel):
     price: float 
     tax: Union[float,None] = None
 
-def MyDebugs():
-    print("Mydebug is  called",flush=True)
-    image_path = "assets/images/test_image.jpg"
-    resized_input_path = resize_image(image_path)
-    mask_output = make_mask(resized_input_path)
+# def MyDebugs():
+#     image_path = "assets/images/test_image.jpg"
+#     resized_image_path = resize_image(image_path)
+#     converted_image_path = convert_to_rgba_image(resized_image_path,mask=False)
+   
+#     custom_output_path = "assets/images/mask.png" 
+#     #RGB 形式のMask 画像のパス
+#     mask_raw_output_path = make_mask(image_path=resized_image_path,output_path=custom_output_path)
+#     #RGBA 形式変換後の画像のパス
+#     converted_mask_path=convert_to_rgba_image(mask_raw_output_path,mask=True)
 
+#     call_gpt_with_image(converted_image_path,converted_mask_path)
+    
 
-MyDebugs()
+# MyDebugs()
 
 
 
@@ -47,6 +55,10 @@ def read_root():
 @app.get("/users/{user_id}")
 async def read_user(user_id: int):
     return {"user_id": user_id}
+
+@app.post("/users/{user_id}/")
+async def get_illustration(image_id: int=0):
+    return 
 
 
 

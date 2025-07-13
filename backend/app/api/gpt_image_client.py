@@ -1,30 +1,39 @@
 import base64
+import sys 
 from openai import OpenAI 
-from app.utils.make_mask import make_mask
-from app.utils.image_to_base64 import image_to_base64
+from pathlib import Path 
+parent_path=Path(__file__).resolve().parent
+sys.path.append(str(parent_path))
+from utils.make_mask import make_mask
+from utils.image_to_base64 import image_to_base64
+from utils.convert_rgb_to_rgba import convert_to_rgba_image
 
 # 引数:image のpath 
 # 出力:GPT API からのレスポンスイラストオブジェクト
-def call_gpt_with_image(image_path):
-    client = OpenAI()
-    # base64_image = image_to_base64(image_path)
-    prompt = "画像をイラスト化して"
-    model = "dall-e-2"
-    mask_output_path = make_mask(image_path)
+def call_gpt_with_image(resized_image_path,mask_image_path):
+    try:
+        client = OpenAI()
+        # base64_image = image_to_base64(image_path)
+        prompt =   "画像をイラスト化して"
+        model = "gpt-image-1"
+        output_path = Path(__file__).resolve().parent.parent / "assets" / "images" / "illust.png"
 
-    with open(image_path,"rb") as image_file,open(mask_output_path,"rb") as mask_file:
-        result = client.images.edit(
-            model=model,
-            image=image_file,
-            mask=mask_file,
-            prompt=prompt
-        )
+        with open(resized_image_path,"rb") as image_file,open(mask_image_path,"rb") as mask_file:
+            result = client.images.edit(
+                model=model,
+                quality="low",
+                image=image_file,
+                prompt=prompt
+            )
 
-        response_image_base64 = result.data[0].b64_json 
-        image_bytes = base64.base64decode(response_image_base64)
+            print("API Result -> ",result,flush=True)
 
-        with open("illust_image.png","wb") as f:
-            f.write(image_bytes)
+            response_image_base64 = result.data[0].b64_json 
+            image_bytes = base64.b64decode(response_image_base64)
 
-# openAI からのレスポンスはローカルに保存されないので，web 上でファイルをオープンしてローカルに書き込む処理を入れておく
+            with open(output_path,"wb") as f:
+                f.write(image_bytes)
 
+    # openAI からのレスポンスはローカルに保存されないので，web 上でファイルをオープンしてローカルに書き込む処理を入れておく
+    except Exception as e:
+        print("Error: ",e)
