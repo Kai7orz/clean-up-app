@@ -42,13 +42,12 @@ onMounted(async () => {
 
 <template>
   <div class="h-screen w-full bg-gradient-to-br from-violet-300 via-pink-200 to-orange-100">
-    <p> useFetch 取得データ : {{response}} </p>
+    <!-- <p> useFetch 取得データ : {{response}} </p> -->
     
     <div class="flex justify-center">
       <div v-for="blobObjectUrl in blobObjectUrls" class="m-10">
         <Card :image_url="blobObjectUrl" />
       </div>   
     </div>
-     
   </div>
 </template>
