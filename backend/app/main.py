@@ -1,5 +1,3 @@
-import cv2 
-import io
 from fastapi import FastAPI 
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel 
@@ -9,7 +7,6 @@ from utils.resize_image import resize_image
 from utils.make_mask import make_mask
 from utils.convert_rgb_to_rgba import convert_to_rgba_image
 from api.gpt_image_client import call_gpt_with_image
-from starlette.responses import StreamingResponse 
 
 class Item(BaseModel):
     name: str 
@@ -61,14 +58,7 @@ async def read_user(user_id: int):
 
 @app.post("/users/{user_id}/")
 async def get_illustration(image_id: int=0):
-    # 画像をファイルオブジェクトとして読み込む
-    # client へバイナリpng として送信する処理
-    print("post is called",flush=True)
-    image_path = "assets/images/illust.png"
-    im = cv2.imread(image_path) 
-    byte_image,buf = cv2.imencode(".png",im) 
-    return StreamingResponse(io.BytesIO(buf.tobytes()), media_type="image/png")
-
+    return 
 
 
 

@@ -35,14 +35,5 @@ def call_gpt_with_image(resized_image_path,mask_image_path):
                 f.write(image_bytes)
 
     # openAI からのレスポンスはローカルに保存されないので，web 上でファイルをオープンしてローカルに書き込む処理を入れておく
-    except FileNotFoundError as e:
-        print("File Not Found ",e)
-        raise
-
-    except base64.binascii.Error as e:
-        print("Base64 Decode Error ",e)
-        raise
-
     except Exception as e:
-        print("Error :",e)
-        raise
+        print("Error: ",e)
